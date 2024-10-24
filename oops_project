@@ -1,0 +1,143 @@
+import os
+
+class HRManagementSystem:
+    def __init__(self):
+        self.file_name = "emp.txt"
+        self.menu_options = {
+            1: self.view_employees,
+            2: self.add_employee,
+            3: self.search_employee,
+            4: self.update_employee,
+            5: self.delete_employee,
+            6: self.exit_system
+        }
+
+    def start(self):
+        print("\n\nWelcome to the Management System of VED Corporations.")
+        while True:
+            print("\n==========Choose the System you want to work on============")
+            print("\n          1. Human Resources Management System")
+            print("          2. Inventory Management System")
+            print("          3. Exit")
+            choice = int(input("\nEnter your choice: "))
+            if choice == 1:
+                self.hr_menu()
+            elif choice == 2:
+                # Initialize and start Inventory Management System
+                pass
+            elif choice == 3:
+                print("\nExiting Management Systems.")
+                break
+            else:
+                print("Invalid Choice! Please Enter Again.")
+
+    def hr_menu(self):
+        print("\nPLEASE CHOOSE :)")
+        print("\n==============HR Management System==============")
+        print("               1. View all Employees")
+        print("               2. Add New Employee")
+        print("               3. Search Employee's Information")
+        print("               4. Update Employee's Information")
+        print("               5. Delete Employee's Information")
+        print("               6. Exit")
+        print("{Employee's ID are unique}")
+
+        while True:
+            choice = int(input("\nEnter your choice: "))
+            if choice in self.menu_options:
+                self.menu_options[choice]()
+            else:
+                print("Invalid Choice! Please Enter Again.")
+
+    def view_employees(self):
+        print("\n")
+        with open(self.file_name, "r") as file:
+            for line in file:
+                id, emp, dept, post, jd, sal = line.strip().split(',')
+                print(f"ID: {id}, Name: {emp}, Department: {dept}, Designation: {post}, Joining day: {jd}, Salary:{sal}")
+                print("\n")
+        print("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
+    def add_employee(self):
+        print("\n")
+        num_employees = int(input("\nEnter no.of Employee details to add: "))
+        for _ in range(num_employees):
+            print("\nDetails of Employee")
+            id = input("Enter Employee ID: ")
+            emp = input("Enter Employee Name: ")
+            dept = input("Enter Department: ")
+            post = input("Enter Designation: ")
+            jd = input("Enter the Joining Date(dd/mm/yyyy):")
+            sal = input("Enter Salary: ")
+            print("============Added Employee's Details============")
+            with open(self.file_name, "a") as file:
+                file.write(f"{id}, {emp}, {dept}, {post}, {jd}, {sal}\n")
+            print("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
+    def search_employee(self):
+        print("\n")
+        emp_id = input("Enter the Employee ID: ")
+        with open(self.file_name, "r") as file:
+            for line in file:
+                id, emp, dept, post, jd, sal = line.strip().split(',')
+                if emp_id == id:
+                    print(f"Employee's Detail :->\nName: {emp}, Department: {dept}, Designation: {post}, Joining day: {jd}, Salary: {sal}")
+        print("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
+    def update_employee(self):
+        print("\n")
+        emp_id = input("Enter Employee ID to update: ")
+        with open(self.file_name, "r") as file:
+            lines = file.readlines()
+            updated_info = []
+            found = False
+            for line in lines:
+                id, emp, dept, post, jd, sal = line.strip().split(',')
+                if emp_id == id:
+                    print(f"Employee's detail :->\nName: {emp}, Department: {dept}, Designation: {post}, Joining day:{jd}, Salary:{sal}")
+                    print("Enter the current value if you do not want to change.")
+                    id = input(f"Updated Employee ID: ")
+                    emp = input(f"Updated Name: ")
+                    dept = input(f"Updated Department: ")
+                    post = input(f"Updated Designation: ")
+                    jd = input(f"Updated Joining Day(dd/mm/yyyy): ")
+                    sal = input(f"Updated Salary: ")
+                    line = f"{id},{emp},{dept},{post},{jd},{sal}\n"
+                    found = True
+                updated_info.append(line)
+            if not found:
+                print("Enter a valid Employee ID please.")
+            with open(self.file_name, "w") as file:
+                file.writelines(updated_info)
+        print("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
+    def delete_employee(self):
+        print("\n")
+        emp_id = input("Enter Employee ID to delete: ")
+        with open(self.file_name, "r") as file:
+            lines = file.readlines()
+            updated_info = []
+            found = False
+            for line in lines:
+                if emp_id in line:
+                    print("========Deleted Employee's Detail=======")
+                    found = True
+                else:
+                    updated_info.append(line)
+            if not found:
+                print("Enter a valid Employee ID please.")
+            with open(self.file_name, "w") as file:
+                file.writelines(updated_info)
+        print("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
+    def exit_system(self):
+        print("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+        print("\nExiting HR Management Program.")
+        print("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
+
+# Similarly, define a class for Inventory Management System using a similar structure.
+
+if __name__ == "__main__":
+    system = HRManagementSystem()
+    system.start()
